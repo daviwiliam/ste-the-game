@@ -134,9 +134,10 @@
   <button id="tc-next">CONTINUAR</button>
 </div>
 <script>
-const canvas = document.getElementById('game');
-const ctx    = canvas.getContext('2d');
+const canvas   = document.getElementById('game');
+const ctx      = canvas.getContext('2d');
 const W = 960, H = 540, GY = 430;
+const IS_TOUCH = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
 // ── STATE ────────────────────────────────────────────────────────
 // loading | title | cutscene | game | gameover | fim | credits
@@ -746,6 +747,7 @@ document.addEventListener('keydown', e => {
 canvas.addEventListener('click', () => initAudio(), { once: true });
 document.addEventListener('keyup', e => { delete keys[e.key]; });
 canvas.addEventListener('click', () => {
+  if (state === 'title')    { startMusic(); initScene(0); state = 'cutscene'; }
   if (state === 'cutscene') skipOrAdvance();
   if (state === 'gameover') startBattle();
 });
@@ -787,9 +789,6 @@ tcNext.addEventListener('touchstart', e => {
   else if (state === 'cutscene') skipOrAdvance();
   else if (state === 'gameover') startBattle();
 }, { passive: false });
-
-// detecção de touch device
-const IS_TOUCH = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
 // aviso de rotação
 const rotateWarn = document.getElementById('rotate-warn');
@@ -1147,7 +1146,7 @@ function drawTitle() {
     ctx.globalAlpha = 0.75;
     ctx.fillStyle   = '#d4c8f0';
     ctx.font        = '7px "Press Start 2P"';
-    ctx.fillText('PRESSIONE QUALQUER TECLA PARA COMEÇAR', W/2, H/2 + 52);
+    ctx.fillText(IS_TOUCH ? 'TOQUE PARA COMEÇAR' : 'PRESSIONE QUALQUER TECLA', W/2, H/2 + 52);
     ctx.globalAlpha = 1;
   }
 
