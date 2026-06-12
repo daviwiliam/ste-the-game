@@ -806,7 +806,7 @@ const tcWrap = document.getElementById('tc');
 function updateTouchUI() {
   if (!IS_TOUCH) return;
   const inGame    = state === 'game';
-  const showNext  = state === 'title' || state === 'cutscene' || state === 'gameover';
+  const showNext  = state === 'title' || state === 'gameover';
   tcWrap.style.display = inGame   ? 'flex'  : 'none';
   tcNext.style.display = showNext ? 'block' : 'none';
 }
