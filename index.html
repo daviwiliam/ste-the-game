@@ -80,13 +80,39 @@
       touch-action: none;
       display: none;
     }
-    /* only show touch UI on touch devices */
-    @media (hover: hover) and (pointer: fine) {
-      #tc, #tc-next { display: none !important; }
+    /* touch UI começa oculto — JS controla visibilidade */
+    #tc      { display: none; }
+    #tc-next { display: none; }
+    /* rotate warning */
+    #rotate-warn {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: #07000e;
+      flex-direction: column;
+      align-items: center; justify-content: center; gap: 24px;
+      text-align: center;
+    }
+    #rotate-warn .rw-icon {
+      font-size: 48px;
+      animation: spin 1.4s ease-in-out infinite alternate;
+    }
+    #rotate-warn p {
+      color: #c8a8ff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      line-height: 1.8;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg);  }
+      to   { transform: rotate(90deg); }
     }
   </style>
 </head>
 <body>
+<div id="rotate-warn">
+  <div class="rw-icon">📱</div>
+  <p>vire o celular<br>para jogar</p>
+</div>
 <div id="wrap">
   <canvas id="game" width="960" height="540"></canvas>
   <div id="tc">
@@ -447,9 +473,13 @@ function stepAnim(c, fps, flen) {
 let AC = null;
 
 function initAudio() {
-  if (AC) return;
-  AC = new (window.AudioContext || window.webkitAudioContext)();
-  setTimeout(startMusic, 100);
+  if (!AC) {
+    AC = new (window.AudioContext || window.webkitAudioContext)();
+    AC.resume().then(() => setTimeout(startMusic, 100));
+  } else {
+    // iOS suspende o contexto — retoma a cada gesto
+    if (AC.state === 'suspended') AC.resume();
+  }
 }
 
 function _osc(freq, type, dur, vol, t, freqEnd) {
@@ -758,12 +788,29 @@ tcNext.addEventListener('touchstart', e => {
   else if (state === 'gameover') startBattle();
 }, { passive: false });
 
-// show/hide CONTINUAR button based on state
+// detecção de touch device
+const IS_TOUCH = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+// aviso de rotação
+const rotateWarn = document.getElementById('rotate-warn');
+function checkOrientation() {
+  if (!IS_TOUCH) return;
+  const portrait = window.innerHeight > window.innerWidth;
+  rotateWarn.style.display = portrait ? 'flex' : 'none';
+}
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
+checkOrientation();
+
+// show/hide botões baseado no estado
+const tcWrap = document.getElementById('tc');
 function updateTouchUI() {
-  const showNext = state === 'title' || state === 'cutscene' || state === 'gameover';
+  if (!IS_TOUCH) return;
+  const inGame    = state === 'game';
+  const showNext  = state === 'title' || state === 'cutscene' || state === 'gameover';
+  tcWrap.style.display = inGame   ? 'flex'  : 'none';
   tcNext.style.display = showNext ? 'block' : 'none';
 }
-// call every frame via loop (patched below)
 
 // ── UPDATE: PLAYER ───────────────────────────────────────────────
 function updPlayer() {
