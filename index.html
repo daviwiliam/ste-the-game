@@ -1055,12 +1055,12 @@ function drawCutscene() {
     ctx.fillRect(cursorX, cursorY, 2, FONT_PX);
   }
 
-  // [ESPAÇO] hint when typing is done
   if (cs.typeDone && Math.floor(Date.now() / 600) % 2) {
+    const hint = IS_TOUCH ? 'toque a tela' : '[ espaço ]';
     ctx.fillStyle = 'rgba(200,200,210,0.5)';
     ctx.font = '6px "Press Start 2P"';
     ctx.textAlign = 'right';
-    ctx.fillText('[ ESPAÇO ]', TB_X + TB_W, TB_Y + TB_H - 5);
+    ctx.fillText(hint, TB_X + TB_W, TB_Y + TB_H - 5);
   }
 
   ctx.restore();
