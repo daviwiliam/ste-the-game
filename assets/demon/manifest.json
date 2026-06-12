@@ -1,0 +1,50 @@
+{
+  "defeat_disappear": {
+    "source_sheet": "798732b4-291a-5ee7-8385-58928b2835cf.png",
+    "frame_count": 6,
+    "frames": [
+      "defeat_disappear_01.png",
+      "defeat_disappear_02.png",
+      "defeat_disappear_03.png",
+      "defeat_disappear_04.png",
+      "defeat_disappear_05.png",
+      "defeat_disappear_06.png"
+    ]
+  },
+  "walk": {
+    "source_sheet": "7a29293b-e4fe-513c-943e-9cac3bb574d7.png",
+    "frame_count": 6,
+    "frames": [
+      "walk_01.png",
+      "walk_02.png",
+      "walk_03.png",
+      "walk_04.png",
+      "walk_05.png",
+      "walk_06.png"
+    ]
+  },
+  "punch_attack": {
+    "source_sheet": "5733281a-67a9-569d-a6b6-e0418f0f27de.png",
+    "frame_count": 6,
+    "frames": [
+      "punch_attack_01.png",
+      "punch_attack_02.png",
+      "punch_attack_03.png",
+      "punch_attack_04.png",
+      "punch_attack_05.png",
+      "punch_attack_06.png"
+    ]
+  },
+  "front_kick": {
+    "source_sheet": "d9c054e5-5092-5695-9246-f11e92484c40.png",
+    "frame_count": 6,
+    "frames": [
+      "front_kick_01.png",
+      "front_kick_02.png",
+      "front_kick_03.png",
+      "front_kick_04.png",
+      "front_kick_05.png",
+      "front_kick_06.png"
+    ]
+  }
+}
